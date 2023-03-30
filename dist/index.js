@@ -8,7 +8,6 @@ const dotenv_1 = tslib_1.__importDefault(require("dotenv"));
 const fs_1 = tslib_1.__importDefault(require("fs"));
 const starknet_1 = require("starknet");
 const ellipticCurve_1 = require("starknet/dist/utils/ellipticCurve");
-const hash_1 = require("starknet/dist/utils/hash");
 const promise_1 = tslib_1.__importDefault(require("mysql2/promise"));
 dotenv_1.default.config();
 const client = new discord_js_1.Client({
@@ -90,7 +89,7 @@ client.on("interactionCreate", async (interaction) => {
                         });
                         await db.connect();
                         const [rows] = await db.query("SELECT * FROM `users` WHERE `user_id` = ?", [userId]);
-                        const message = (0, hash_1.pedersen)([userId.toString(), wallet]);
+                        const message = wallet.toString();
                         const signature = (0, ellipticCurve_1.sign)(starkKeyPair, message);
                         const [row] = rows;
                         if (row) {

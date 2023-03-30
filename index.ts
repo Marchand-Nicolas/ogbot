@@ -122,7 +122,7 @@ client.on("interactionCreate", async (interaction) => {
               "SELECT * FROM `users` WHERE `user_id` = ?",
               [userId]
             );
-            const message = pedersen([userId.toString(), wallet]);
+            const message = wallet.toString();
             const signature = sign(starkKeyPair, message);
             const [row] = rows as any;
             if (row) {
