@@ -21,7 +21,7 @@
       "baseUrl": "./"
   },
   "files": [
-      "**/*.ts"
+      "index.ts"
   ],
   "include": [
       "./**/*.ts"
