@@ -39,6 +39,18 @@ const commands = [
             },
         ],
     },
+    {
+        name: "remove",
+        description: "Admin only.",
+        options: [
+            {
+                name: "user",
+                description: "user to remove from the blacklist",
+                type: 6,
+                required: true,
+            },
+        ],
+    },
 ];
 const rest = new rest_1.REST({ version: "9" }).setToken(process.env.BOT_TOKEN);
 (async () => {
@@ -56,23 +68,66 @@ const rest = new rest_1.REST({ version: "9" }).setToken(process.env.BOT_TOKEN);
 client.on("interactionCreate", async (interaction) => {
     const userId = interaction.user.id;
     if (interaction.isCommand()) {
-        if (interaction.commandName !== "claim")
-            return;
-        if (!(interaction.member?.roles).cache.has(process.env.OG_ROLE_ID))
-            return interaction.reply({
-                content: "❌ You do not have the OG role",
+        if (interaction.commandName === "claim") {
+            if (!(interaction.member?.roles).cache.has(process.env.OG_ROLE_ID))
+                return interaction.reply({
+                    content: "❌ You do not have the OG role",
+                    ephemeral: true,
+                });
+            const wallet = interaction.options.getString("mainnet-wallet-address");
+            if (!wallet)
+                return interaction.reply({
+                    content: "❌ No wallet provided",
+                    ephemeral: true,
+                });
+            if (wallet.length <= 42)
+                return interaction.reply({
+                    content: "❌ Invalid wallet address. Please provide a starknet wallet address",
+                    ephemeral: true,
+                });
+            wallets[userId] = wallet;
+            const embed = new discord_js_1.MessageEmbed().setTitle("Claim your OG domain")
+                .setDescription(`Your wallet address is: ${wallet}
+  After clicking __continue anyway__, you won't be able to change your wallet address. Are you sure you want to continue? Check you provided a valid **mainnet** wallet address. Please click __CHECK ACCOUNT__ to check if you provided a valid deployed account.`);
+            const row = new discord_js_1.MessageActionRow().addComponents(new discord_js_1.MessageButton()
+                .setLabel("CHECK ACCOUNT")
+                .setStyle("LINK")
+                .setURL(`https://starkscan.co/contract/${wallet}`), new discord_js_1.MessageButton()
+                .setCustomId("yes")
+                .setLabel("continue anyway")
+                .setStyle("DANGER"), new discord_js_1.MessageButton()
+                .setCustomId("no")
+                .setLabel("cancel")
+                .setStyle("SECONDARY"));
+            interaction.reply({
+                embeds: [embed],
+                components: [row],
                 ephemeral: true,
             });
-        const wallet = interaction.options.getString("mainnet-wallet-address");
-        wallets[userId] = wallet;
-        const embed = new discord_js_1.MessageEmbed().setTitle("Claim your OG domain")
-            .setDescription(`Your wallet address is: ${wallet}
-  After clicking Yes, you won't be able to change your wallet address. Are you sure you want to continue? Check you provided a valid **mainnet** wallet address.`);
-        const row = new discord_js_1.MessageActionRow().addComponents(new discord_js_1.MessageButton()
-            .setCustomId("yes")
-            .setLabel("Yes")
-            .setStyle("SUCCESS"), new discord_js_1.MessageButton().setCustomId("no").setLabel("No").setStyle("DANGER"));
-        interaction.reply({ embeds: [embed], components: [row], ephemeral: true });
+        }
+        else if (interaction.commandName === "remove") {
+            if (!(interaction.member?.permissions).has(discord_js_1.Permissions.FLAGS.ADMINISTRATOR))
+                return interaction.reply({
+                    content: "❌ You do not have the permission to use this command",
+                    ephemeral: true,
+                });
+            const user = interaction.options.getUser("user");
+            if (!user)
+                return interaction.reply({ content: "❌ No user provided" });
+            const db = await promise_1.default.createConnection({
+                host: process.env.DB_HOST,
+                user: process.env.DB_USER,
+                password: process.env.DB_PASSWORD,
+                database: process.env.DB_NAME,
+            });
+            await db.connect();
+            await db.query("DELETE FROM `users` WHERE `user_id` = ?", [user.id]);
+            db.end();
+            interaction.reply({
+                content: "✅ User removed from the blacklist",
+                ephemeral: true,
+            });
+        }
     }
     else {
         if (interaction.isButton()) {
