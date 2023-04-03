@@ -181,11 +181,14 @@ client.on("interactionCreate", async (interaction) => {
                     }
                     break;
                 case "no":
-                    interaction.update({
-                        content: "❌ Cancelled.",
-                        embeds: [],
-                        components: [],
-                    });
+                    try {
+                        interaction.update({
+                            content: "❌ Cancelled.",
+                            embeds: [],
+                            components: [],
+                        });
+                    }
+                    catch { }
                     break;
             }
         }
