@@ -88,9 +88,9 @@ client.on("interactionCreate", async (interaction) => {
             wallets[userId] = wallet;
             const embed = new discord_js_1.MessageEmbed().setTitle("Claim your OG domain")
                 .setDescription(`Your wallet address is: ${wallet}
-  After clicking __continue anyway__, you won't be able to change your wallet address. Are you sure you want to continue? Check you provided a valid **mainnet** wallet address. Please click __CHECK ACCOUNT__ to check if you provided a valid deployed account.`);
+  After clicking __continue anyway__, you won't be able to change your wallet address. Are you sure you want to continue? Check you provided a valid **mainnet** wallet address. Please click __CHECK ADDRESS to check if you provided a valid deployed address.`);
             const row = new discord_js_1.MessageActionRow().addComponents(new discord_js_1.MessageButton()
-                .setLabel("CHECK ACCOUNT")
+                .setLabel("CHECK ADDRESS")
                 .setStyle("LINK")
                 .setURL(`https://starkscan.co/contract/${wallet}`), new discord_js_1.MessageButton()
                 .setCustomId("yes")
