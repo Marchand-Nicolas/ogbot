@@ -118,7 +118,7 @@ client.on("interactionCreate", async (interaction) => {
       wallets[userId] = wallet as string;
       const embed = new MessageEmbed().setTitle("Claim your OG domain")
         .setDescription(`Your wallet address is: ${wallet}
-  After clicking __continue anyway__, you won't be able to change your wallet address. Are you sure you want to continue? Check you provided a valid **mainnet** wallet address. Please click __CHECK ADDRESS to check if you provided a valid deployed address.`);
+  After clicking __continue anyway__, you won't be able to change your wallet address. Are you sure you want to continue? Check you provided a valid **mainnet** wallet address. Please click __CHECK ADDRESS__ to check if you provided a valid deployed address.`);
       const row = new MessageActionRow().addComponents(
         new MessageButton()
           .setLabel("CHECK ADDRESS")
