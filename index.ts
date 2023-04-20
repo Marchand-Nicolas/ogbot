@@ -41,8 +41,8 @@ type Wallets = {
 
 let wallets: Wallets = {};
 
-const commands = [
-  {
+const commands: any = [
+  /*{
     name: "claim",
     description: "Claim your OG domain.",
     options: [
@@ -65,7 +65,7 @@ const commands = [
         required: true,
       },
     ],
-  },
+  },*/
 ];
 
 const rest = new REST({ version: "9" }).setToken(

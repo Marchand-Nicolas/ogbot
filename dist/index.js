@@ -26,32 +26,7 @@ fs_1.default.readdir("./events/", (error, f) => {
     });
 });
 let wallets = {};
-const commands = [
-    {
-        name: "claim",
-        description: "Claim your OG domain.",
-        options: [
-            {
-                name: "mainnet-wallet-address",
-                description: "your mainnet wallet address",
-                type: 3,
-                required: true,
-            },
-        ],
-    },
-    {
-        name: "remove",
-        description: "Admin only.",
-        options: [
-            {
-                name: "user",
-                description: "user to remove from the blacklist",
-                type: 6,
-                required: true,
-            },
-        ],
-    },
-];
+const commands = [];
 const rest = new rest_1.REST({ version: "9" }).setToken(process.env.BOT_TOKEN);
 (async () => {
     try {
