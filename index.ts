@@ -89,7 +89,7 @@ const rest = new REST({ version: "9" }).setToken(
   }
 })();
 
-client.on("interactionCreate", async (interaction) => {
+/*client.on("interactionCreate", async (interaction) => {
   const userId = interaction.user.id;
   if (interaction.isCommand()) {
     if (interaction.commandName === "claim") {
@@ -237,4 +237,4 @@ client.on("interactionCreate", async (interaction) => {
       }
     }
   }
-});
+});*/
